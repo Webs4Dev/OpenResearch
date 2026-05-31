@@ -163,6 +163,7 @@ Q&A Agent
 - ✅ Day 13 — Paper Deduplication Layer
 - ✅ Day 14 — Edge Case Handling and Ranking Robustness
 - ✅ Day 15 — LLM-powered Source Discovery Agent
+- ✅ Day 16 — Web Retrieval Agent v1
 
 ---
 
