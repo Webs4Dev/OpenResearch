@@ -3,6 +3,7 @@ from backend.retrieval.retriever_semantic import search_papers as semantic_searc
 from backend.retrieval.retriever_pubmed import search_papers as pubmed_search
 from backend.retrieval.retriever_openalex import search_papers as openalex_search
 from backend.retrieval.retriever_crossref import search_papers as crossref_search
+from backend.retrieval.retriever_web import domain_web_retrieve
 from backend.retrieval.deduplicator import deduplicate_papers
 from backend.utils.logger import log
 from concurrent.futures import ThreadPoolExecutor,as_completed
@@ -14,6 +15,7 @@ ALL_SOURCES = {
     "pubmed": pubmed_search,
     "openalex": openalex_search,
     "crossref": crossref_search,
+    "web":domain_web_retrieve
 }
 
 
@@ -80,7 +82,7 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
                 }
                 log(f"[{name}] -> {len(results)} papers")
 
-    log(f"[Retrieved Paper] -> {len(papers)}")
+    log(f"[Retrieved Papers] -> {len(papers)}")
     papers = deduplicate_papers(papers)
     log(f"[Unique Papers] -> {len(papers)}")
 

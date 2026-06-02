@@ -99,7 +99,7 @@ def search_papers(query:str,max_results:int):
                     title=title,
                     abstract=abstract or "Not Available",
                     authors=authors,
-                    published_year=year or "Not Available",
+                    published_year=year or None,
                     url=pdf_url or "Not Available",
                     source="openalex"
                 )

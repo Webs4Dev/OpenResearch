@@ -38,7 +38,7 @@ def search_papers(query: str, max_results: int):
                     title=paper.title,
                     abstract=paper.summary or "Not Available",   
                     authors=[a.name for a in paper.authors],
-                    published_year=paper.published.year or "Not Available",
+                    published_year=paper.published.year or None,
                     url=paper.pdf_url or "Not Available",
                     source="arxiv"
                 )
