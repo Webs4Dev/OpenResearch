@@ -107,5 +107,4 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
         successful_sources=successful_sources,
         failed_sources=failed_sources
     )
-    stats = stats.model_dump()
     return papers, report, stats

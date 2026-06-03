@@ -5,7 +5,7 @@ from backend.schemas.stats import RetrievalStats
 class SearchRequest(BaseModel):
     query: str
     project_description: Optional[str] = None   
-    max_results_per_source: Optional[int] = 5
+    max_results: Optional[int] = 5
     sources: Optional[list[str]] = None           
 
 class SourceReport(BaseModel):
@@ -21,5 +21,5 @@ class SearchResponse(BaseModel):
     total_papers_retrieved: int
     total_ranked: int
     source_report: dict[str, SourceReport]
-    retrieval_stats: dict[str, RetrievalStats]
+    retrieval_stats: RetrievalStats
     ranked_results: list

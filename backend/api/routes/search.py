@@ -33,7 +33,7 @@ async def search_and_rank(request: SearchRequest):
     try:
         papers, report, stats = retrieve_all(
             query=request.query,
-            max_results=request.max_results_per_source,
+            max_results=request.max_results,
             sources=active_sources
         )
 
