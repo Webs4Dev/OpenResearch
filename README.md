@@ -165,6 +165,7 @@ Q&A Agent
 - ✅ Day 15 — LLM-powered Source Discovery Agent
 - ✅ Day 16 — Web Retrieval Agent v1
 - ✅ Day 17 — Web Retrieval Agent Integration
+- ✅ Day 18 — Retrieval Statistics & Pipeline Stabilization
 
 ---
 
