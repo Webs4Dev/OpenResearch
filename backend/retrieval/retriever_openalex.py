@@ -107,5 +107,5 @@ def search_papers(query:str,max_results:int):
 
     except Exception as e:
         log(f"OpenAlex Error: {e}")
-
+        raise
     return papers

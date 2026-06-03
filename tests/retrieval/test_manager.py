@@ -3,7 +3,7 @@ import time
 from backend.retrieval.manager import retrieve_all
 
 start=time.time()
-papers,report=retrieve_all(
+papers,report,stats=retrieve_all(
     query="multi agent memory systems",
     max_results=5
 )

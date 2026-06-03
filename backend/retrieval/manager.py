@@ -7,6 +7,8 @@ from backend.retrieval.retriever_web import domain_web_retrieve
 from backend.retrieval.deduplicator import deduplicate_papers
 from backend.utils.logger import log
 from concurrent.futures import ThreadPoolExecutor,as_completed
+from backend.schemas.stats import RetrievalStats
+import time
 
 
 ALL_SOURCES = {
@@ -21,17 +23,20 @@ ALL_SOURCES = {
 
 def retrieve_source(source_name,retriever,query,max_results):
     try:
+        start=time.time()
         results = retriever(
             query=query,
             max_results=max_results
         )
+        duration=round(time.time()-start,2)
         return (
             source_name,
             results,
-            None
+            None,
+            duration
         )
     except Exception as e:
-        return (source_name,[],str(e))
+        return (source_name,[],str(e),0.0)
 
 
 def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -> tuple[list, dict]:
@@ -39,6 +44,7 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
     Returns:
         papers        - flat list of Paper objects
         source_report - { source_name: { count, status, error } }
+        stats         - count (total papers, unique papers, successful sources...)
     """
 
     active = sources if sources else list(ALL_SOURCES.keys())
@@ -60,7 +66,7 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
 
         for future in as_completed(futures):
             source_name=(futures[future])
-            name,results,error=(
+            name,results,error,duration=(
                 future.result()
             )
 
@@ -70,6 +76,8 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
                 report[name]={
                     "count":0,
                     "status":"error",
+                    "retrieval_type":"web" if name=="web" else "api",
+                    "duration": duration,
                     "error":error
                 }
                 log(f"[{name}] failed: {error}")
@@ -78,12 +86,26 @@ def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -
                 report[name]={
                     "count":len(results),
                     "status":"ok",
+                    "retrieval_type":"web" if name=="web" else "api",
+                    "duration":duration,
                     "error":None
                 }
                 log(f"[{name}] -> {len(results)} papers")
 
-    log(f"[Retrieved Papers] -> {len(papers)}")
-    papers = deduplicate_papers(papers)
-    log(f"[Unique Papers] -> {len(papers)}")
+    successful_sources = sum(1 for source in report.values() if source["status"]=="ok")
+    failed_sources = sum(1 for source in report.values() if source["status"]=="error")
 
-    return papers, report
+    raw_count = len(papers) # total papers before removing same papers
+    papers = deduplicate_papers(papers)
+    unique_count = len(papers) # total papers after removing same papers
+    duplicates_removed = (raw_count - unique_count)
+
+    stats = RetrievalStats(
+        total_papers=raw_count,
+        unique_papers=unique_count,
+        duplicate_papers_removed=duplicates_removed,
+        successful_sources=successful_sources,
+        failed_sources=failed_sources
+    )
+    stats = stats.model_dump()
+    return papers, report, stats

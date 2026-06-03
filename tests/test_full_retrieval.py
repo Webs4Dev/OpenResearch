@@ -1,7 +1,7 @@
 from backend.retrieval.manager import retrieve_all
 
 
-papers,report = retrieve_all(
+papers,report,stats = retrieve_all(
     query="multi agent memory systems",
     max_results=2
 )
@@ -21,3 +21,4 @@ for paper in papers:
     )
 print()
 print(report)
+print(stats)

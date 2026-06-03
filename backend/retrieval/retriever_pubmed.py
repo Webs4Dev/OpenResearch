@@ -135,5 +135,5 @@ def search_papers(query:str,max_results:int):
 
     except Exception as e:
         log(f"PubMed Error: {e}")
-
+        raise
     return papers

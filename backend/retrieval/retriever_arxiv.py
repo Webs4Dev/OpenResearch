@@ -46,5 +46,5 @@ def search_papers(query: str, max_results: int):
 
     except Exception as e:
         log(f"ArXiv Error: {e}")
-
+        raise
     return papers

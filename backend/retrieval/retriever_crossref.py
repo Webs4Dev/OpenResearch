@@ -103,13 +103,7 @@ def search_papers(query:str,max_results:int):
                 )
             )
 
-    except requests.exceptions.Timeout:
-        log("Crossref Timeout Error")
-
-    except requests.exceptions.RequestException as e:
-        log(f"Crossref Request Error: {e}")
-
     except Exception as e:
         log(f"Crossref Error: {e}")
-
+        raise
     return papers

@@ -52,5 +52,5 @@ def search_papers(query: str,max_results: int):
 
     except Exception as e:
         log(f"Semantic Scholar Error: {e}")
-
+        raise
     return papers

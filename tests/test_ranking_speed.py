@@ -5,7 +5,7 @@ from backend.agents.ranking_agent import rank_paper,rank_multiple_papers
 
 query="multi agent memory systems"
 
-papers,_=retrieve_all(query,1)
+papers,_,_=retrieve_all(query,1)
 
 # Sequential Ranking 
 start = time.time()

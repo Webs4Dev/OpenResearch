@@ -1,33 +1,12 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import Optional
 
 from backend.retrieval.manager import retrieve_all, ALL_SOURCES
 from backend.agents.ranking_agent import rank_multiple_papers
 from backend.utils.logger import log
+from backend.schemas.report import *
 
 
 router = APIRouter()
-
-class SearchRequest(BaseModel):
-    query: str
-    project_description: Optional[str] = None   
-    max_results_per_source: Optional[int] = 5
-    sources: Optional[list[str]] = None           
-
-class SourceReport(BaseModel):
-    count: int
-    status: str
-    error: Optional[str]
-
-
-class SearchResponse(BaseModel):
-    query: str
-    sources_requested: list[str]
-    total_papers_retrieved: int
-    total_ranked: int
-    source_report: dict[str, SourceReport]
-    ranked_results: list
 
 @router.get("/sources")
 def list_sources():
@@ -52,7 +31,7 @@ async def search_and_rank(request: SearchRequest):
     active_sources = (request.sources or list(ALL_SOURCES.keys()))
 
     try:
-        papers, report = retrieve_all(
+        papers, report, stats = retrieve_all(
             query=request.query,
             max_results=request.max_results_per_source,
             sources=active_sources
@@ -72,13 +51,14 @@ async def search_and_rank(request: SearchRequest):
             total_papers_retrieved=0,
             total_ranked=0,
             source_report={k: SourceReport(**v) for k, v in report.items()},
+            retrieval_stats=stats,
             ranked_results=[]
         )
 
     ranked = rank_multiple_papers(request.query,papers,request.project_description)
     ranked = [r.model_dump() for r in ranked]
 
-    ranked.sort(key=lambda r: r.total_score, reverse=True)
+    ranked.sort(key=lambda r: r["total_score"], reverse=True)
 
     return SearchResponse(
         query=request.query,
@@ -86,5 +66,6 @@ async def search_and_rank(request: SearchRequest):
         total_papers_retrieved=len(papers),
         total_ranked=len(ranked),
         source_report={k: SourceReport(**v) for k, v in report.items()},
-        ranked_results=[r.model_dump() for r in ranked]
+        retrieval_stats=stats,
+        ranked_results=ranked
     )
