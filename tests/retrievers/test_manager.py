@@ -1,6 +1,6 @@
 import time
 
-from backend.retrieval.manager import retrieve_all
+from backend.retrievers.manager import retrieve_all
 
 start=time.time()
 papers,report,stats=retrieve_all(

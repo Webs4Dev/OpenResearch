@@ -1,6 +1,6 @@
 import time 
 
-from backend.retrieval.manager import retrieve_all
+from backend.retrievers.manager import retrieve_all
 from backend.agents.ranking_agent import rank_paper,rank_multiple_papers
 
 query="multi agent memory systems"

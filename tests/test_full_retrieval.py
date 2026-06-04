@@ -1,5 +1,4 @@
-from backend.retrieval.manager import retrieve_all
-
+from backend.retrievers.manager import retrieve_all
 
 papers,report,stats = retrieve_all(
     query="multi agent memory systems",

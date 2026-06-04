@@ -1,10 +1,10 @@
-from backend.retrieval.retriever_arxiv import search_papers as arxiv_search
-from backend.retrieval.retriever_semantic import search_papers as semantic_search
-from backend.retrieval.retriever_pubmed import search_papers as pubmed_search
-from backend.retrieval.retriever_openalex import search_papers as openalex_search
-from backend.retrieval.retriever_crossref import search_papers as crossref_search
-from backend.retrieval.retriever_web import domain_web_retrieve
-from backend.retrieval.deduplicator import deduplicate_papers
+from backend.retrievers.retriever_arxiv import search_papers as arxiv_search
+from backend.retrievers.retriever_semantic import search_papers as semantic_search
+from backend.retrievers.retriever_pubmed import search_papers as pubmed_search
+from backend.retrievers.retriever_openalex import search_papers as openalex_search
+from backend.retrievers.retriever_crossref import search_papers as crossref_search
+from backend.retrievers.retriever_web import domain_web_retrieve
+from backend.retrievers.deduplicator import deduplicate_papers
 from backend.utils.logger import log
 from concurrent.futures import ThreadPoolExecutor,as_completed
 from backend.schemas.stats import RetrievalStats

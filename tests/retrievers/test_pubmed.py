@@ -1,6 +1,6 @@
-from backend.retrieval.retriever_semantic import search_papers as semantic_search
+from backend.retrievers.retriever_pubmed import search_papers as pubmed_search
 
-papers = semantic_search(
+papers = pubmed_search(
     query="multi agent memory systems",
     max_results=5
     )

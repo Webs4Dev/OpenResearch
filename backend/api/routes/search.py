@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from backend.retrieval.manager import retrieve_all, ALL_SOURCES
+from backend.retrievers.manager import retrieve_all, ALL_SOURCES
 from backend.agents.ranking_agent import rank_multiple_papers
 from backend.utils.logger import log
 from backend.schemas.report import *

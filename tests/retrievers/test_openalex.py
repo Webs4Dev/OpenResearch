@@ -1,4 +1,4 @@
-from backend.retrieval.retriever_openalex import search_papers as openalex_search
+from backend.retrievers.retriever_openalex import search_papers as openalex_search
 
 papers = openalex_search(
     query="multi agent memory systems",

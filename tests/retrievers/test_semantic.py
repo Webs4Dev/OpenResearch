@@ -1,6 +1,6 @@
-from backend.retrieval.retriever_arxiv import search_papers as arxiv_search
+from backend.retrievers.retriever_semantic import search_papers as semantic_search
 
-papers = arxiv_search(
+papers = semantic_search(
     query="multi agent memory systems",
     max_results=5
     )

@@ -1,6 +1,6 @@
-from backend.retrieval.retriever_crossref import search_papers as crossref_search
+from backend.retrievers.retriever_arxiv import search_papers as arxiv_search
 
-papers = crossref_search(
+papers = arxiv_search(
     query="multi agent memory systems",
     max_results=5
     )

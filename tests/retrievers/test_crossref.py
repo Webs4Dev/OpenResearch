@@ -1,6 +1,6 @@
-from backend.retrieval.retriever_pubmed import search_papers as pubmed_search
+from backend.retrievers.retriever_crossref import search_papers as crossref_search
 
-papers = pubmed_search(
+papers = crossref_search(
     query="multi agent memory systems",
     max_results=5
     )

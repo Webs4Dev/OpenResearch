@@ -1,4 +1,4 @@
-from backend.retrieval.retriever_web import web_retrieve
+from backend.retrievers.retriever_web import web_retrieve
 
 
 papers = web_retrieve(
