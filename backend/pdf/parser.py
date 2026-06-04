@@ -5,7 +5,7 @@ def extract_pdf_text(pdf_path:str):
     text = []
 
     for page in doc:
-        page_text = page.get_text()
+        page_text = page.get_text("text",sort=True)
         text.append(page_text)
 
     doc.close()
