@@ -167,6 +167,7 @@ Q&A Agent
 - ✅ Day 17 — Web Retrieval Agent Integration
 - ✅ Day 18 — Retrieval Statistics & Pipeline Stabilization
 - ✅ Day 19 — PDF Upload and Text Extraction Pipeline
+- ✅ Day 20 — PDF Chunking Pipeline
 
 ---
 
