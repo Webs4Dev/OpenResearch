@@ -168,6 +168,7 @@ Q&A Agent
 - ✅ Day 18 — Retrieval Statistics & Pipeline Stabilization
 - ✅ Day 19 — PDF Upload and Text Extraction Pipeline
 - ✅ Day 20 — PDF Chunking Pipeline
+- ✅ Day 21 — Project Relevance Agent
 
 ---
 
