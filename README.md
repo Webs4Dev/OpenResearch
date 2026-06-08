@@ -169,6 +169,7 @@ Q&A Agent
 - ✅ Day 19 — PDF Upload and Text Extraction Pipeline
 - ✅ Day 20 — PDF Chunking Pipeline
 - ✅ Day 21 — Project Relevance Agent
+- ✅ Day 22 — PDF QA Agent
 
 ---
 
