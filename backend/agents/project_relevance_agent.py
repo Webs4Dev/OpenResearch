@@ -36,7 +36,7 @@ def find_relevant_chunks(chunks,project_description):
     parsed = json.loads(response.choices[0].message.content)
     return RelevanceResponse(**parsed)
 
-def sort_relevant_chunks(chunks,project_description,top_k=None):
+def sort_relevant_chunks(chunks,project_description,top_k=5):
     result = find_relevant_chunks(chunks,project_description)
     log(f"Analyzed {len(chunks)} chunks")
 
@@ -45,10 +45,8 @@ def sort_relevant_chunks(chunks,project_description,top_k=None):
         reverse=True
     )
 
-    filtered = [chunk for chunk in result.evaluated_chunks if chunk.relevance_score >= 40]
+    filtered = [chunk for chunk in result.evaluated_chunks if chunk.relevance_score >= 50]
 
-    if top_k != None:
-        filtered = filtered[:top_k]
-        
+    filtered = filtered[:top_k]
     log(f"Returning {len(filtered)} chunks")
     return filtered

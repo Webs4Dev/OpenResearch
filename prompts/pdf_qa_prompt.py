@@ -24,7 +24,6 @@ Return ONLY valid JSON. No markdown, no text outside the JSON.
 
 {{
   "answer": "<your answer strictly based on the chunks>",
-  "confidence": <0-100>,
-  "found_in_chunks": [<list of chunk indices that contained the answer>]
+  "confidence": <0-100>
 }}
 """
