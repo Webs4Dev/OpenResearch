@@ -33,11 +33,4 @@ def answer_question(question,chunks):
     
     log(f"Question: {question}")
     parsed = json.loads(response.choices[0].message.content)
-    return PDFQAResponse(
-        answer=parsed["answer"],
-        confidence=parsed["confidence"],
-        source_chunks=[
-            chunk.chunk_id
-            for chunk in chunks
-        ]
-)
+    return PDFQAResponse(**parsed)
