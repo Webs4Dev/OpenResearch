@@ -1,21 +1,18 @@
-from fastapi import APIRouter,UploadFile,File
+from fastapi import APIRouter,UploadFile,File,Form
 import fitz
 
 from backend.pdf.parser import extract_pdf_text
 from backend.pdf.chunker import build_chunks
+from backend.agents.project_relevance_agent import sort_relevant_chunks
+from backend.agents.pdf_qa_agent import answer_question
+from backend.schemas.pdf_analysis import PDFAnalysisResponse
 from backend.utils.logger import log
-from backend.schemas.pdf import PDFAnalysisResponse
 
 router = APIRouter()
 
-@router.post(
-    "/pdf/analyze",
+@router.post("/pdf/analyze",response_model=PDFAnalysisResponse)
 
-    response_model=
-    PDFAnalysisResponse
-)
-
-async def analyze_pdf(file:UploadFile=File(...)):
+async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...),question:str=File(...)):
 
     temp_path=(
         f"temp_"
@@ -23,6 +20,7 @@ async def analyze_pdf(file:UploadFile=File(...)):
     )
     contents=(await file.read())
 
+    log(f"PDF uploaded: {file.filename}")
     with open(temp_path,"wb") as f:
         f.write(contents)
 
@@ -34,10 +32,25 @@ async def analyze_pdf(file:UploadFile=File(...)):
 
     pages=len(fitz.open(temp_path))
 
+    relevant_chunks = sort_relevant_chunks(chunks=chunks[:10],project_description=project_description,
+        top_k=5)
+    
+    selected_chunks = [chunk for chunk in chunks if chunk.chunk_id in
+        [   
+            r.chunk_id
+            for r in relevant_chunks
+        ]
+    ]
+
+    qa_result = answer_question(question=question,chunks=selected_chunks)
+
     return PDFAnalysisResponse(
         filename=file.filename,
         pages=pages,
         text_length=len(text),
-        extracted_text=text,
-        chunk_count=len(chunks)
+        chunk_count=len(chunks),
+        relevant_chunks=relevant_chunks,
+        answer=qa_result.answer,
+        confidence=qa_result.confidence,
+        found_in_chunks=qa_result.found_in_chunks
     )

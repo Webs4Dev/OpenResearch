@@ -9,10 +9,10 @@ Rules:
 - Be concise but complete. Do not pad the answer with filler.
 
 Confidence guide:
-- 5 → Answer is clearly and directly stated in the chunks
-- 3-4  → Answer can be reasonably inferred from the chunks
-- 2 → Answer is partially present, some gaps remain
-- 0-1   → Answer is mostly absent or too vague to be useful
+- 85-100 → Answer is clearly and directly stated in the chunks
+- 60-85 → Answer can be reasonably inferred from the chunks
+- 30-59 → Answer is partially present, some gaps remain
+- 0-29   → Answer is mostly absent or too vague to be useful
 
 QUESTION:
 {question}
@@ -24,7 +24,7 @@ Return ONLY valid JSON. No markdown, no text outside the JSON.
 
 {{
   "answer": "<your answer strictly based on the chunks>",
-  "confidence": <0-5>
+  "confidence": <0-100>
   "found_in_chunks": [<list of chunk indices that contained the answer>]
 }}
 """
