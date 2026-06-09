@@ -170,6 +170,7 @@ Q&A Agent
 - ✅ Day 20 — PDF Chunking Pipeline
 - ✅ Day 21 — Project Relevance Agent
 - ✅ Day 22 — PDF QA Agent
+- ✅ Day 23 — PDF Deep Dive Endpoint
 
 ---
 
