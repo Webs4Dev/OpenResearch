@@ -1,8 +1,8 @@
 from fastapi import APIRouter,UploadFile,File,Form
 import fitz
 
-from backend.pdf.parser import extract_pdf_text
-from backend.pdf.chunker import build_chunks
+from backend.pdf.parser import extract_pdf_pages
+from backend.pdf.chunker import build_chunks_from_pages
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf_analysis import PDFAnalysisResponse
@@ -24,11 +24,13 @@ async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...
     with open(temp_path,"wb") as f:
         f.write(contents)
 
-    text=extract_pdf_text(temp_path)
-    log(f"Extracted text from {file.filename}")
+    pages=extract_pdf_pages(temp_path)
+    log(f"Extracted pages from {file.filename}")
 
-    chunks = build_chunks(text)
+    chunks = build_chunks_from_pages(pages)
     log(f"Created {len(chunks)} chunks")
+
+    text = "\n".join(page["text"] for page in pages)
 
     pages=len(fitz.open(temp_path))
 
@@ -52,5 +54,6 @@ async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...
         relevant_chunks=relevant_chunks,
         answer=qa_result.answer,
         confidence=qa_result.confidence,
-        found_in_chunks=qa_result.found_in_chunks
+        found_in_chunks=qa_result.found_in_chunks,
+        found_in_pages=qa_result.found_in_pages
     )

@@ -10,6 +10,7 @@ class PDFAnalysisResponse(BaseModel):
     answer:str
     confidence:int
     found_in_chunks:list[int]
+    found_in_pages:list[int]
 
 class PDFRequest(BaseModel):
     project_description:str

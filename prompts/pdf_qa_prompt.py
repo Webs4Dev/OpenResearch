@@ -26,5 +26,6 @@ Return ONLY valid JSON. No markdown, no text outside the JSON.
   "answer": "<your answer strictly based on the chunks>",
   "confidence": <0-100>
   "found_in_chunks": [<list of chunk indices that contained the answer>]
+  "found_in_pages": [<list of page numbers that contained the chunks containing answer>]
 }}
 """

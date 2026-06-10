@@ -4,6 +4,7 @@ def format_chunks(chunks):
         formatted.append(
             {
                 "chunk_id":chunk.chunk_id,
+                "page_no":chunk.page_no,
                 "text":chunk.text
             }
         )
