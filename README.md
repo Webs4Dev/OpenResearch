@@ -171,7 +171,8 @@ Q&A Agent
 - ✅ Day 21 — Project Relevance Agent
 - ✅ Day 22 — PDF QA Agent
 - ✅ Day 23 — PDF Deep Dive Endpoint
-- ✅ Day 24 — Page-Aware Overlap Chunking"
+- ✅ Day 24 — Page-Aware Overlap Chunking
+- ✅ Day 25 — ChromaDB Vector Storing  
 
 ---
 
