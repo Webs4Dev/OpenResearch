@@ -172,7 +172,8 @@ Q&A Agent
 - ✅ Day 22 — PDF QA Agent
 - ✅ Day 23 — PDF Deep Dive Endpoint
 - ✅ Day 24 — Page-Aware Overlap Chunking
-- ✅ Day 25 — ChromaDB Vector Storing  
+- ✅ Day 25 — ChromaDB Vector Storing
+- ✅ Day 26 — Paper Metadata Addition to DB
 
 ---
 
