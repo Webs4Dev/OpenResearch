@@ -55,7 +55,7 @@ def search_chunks(query,k=5):
         query_embeddings=[query_embedding],
         n_results=k
     )
-    log(f"Retrieved {len(results)} chunks")
+    log(f"Retrieved {len(results["ids"][0])} chunks")
 
     results_list=[]
 
