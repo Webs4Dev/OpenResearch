@@ -23,15 +23,14 @@ def store_papers(papers):
                         "paper_title": paper.title,
                         "source": paper.source,
                         "url": paper.url,
-                        "year": paper.year
+                        "year": paper.published_year
                     }
                 ]
             )
 
             stored += 1
 
-        except Exception:
-            # duplicate paper already exists
-            pass
+        except Exception as e:
+            log(f"[Rag Error] {e}")
 
     log(f"Stored {stored} papers")

@@ -65,8 +65,8 @@ def search_chunks(query,k=5):
             {
                 "paper_title":metadata["paper_title"],
                 "source":metadata["source"],
-                "page_no":metadata["page_no"],
-                "chunk_id":metadata["chunk_id"],
+                "page_no":metadata.get("page_no"),
+                "chunk_id":metadata.get("chunk_id"),
                 "text":results["documents"][0][i],
                 "distance":results["distances"][0][i]
             }

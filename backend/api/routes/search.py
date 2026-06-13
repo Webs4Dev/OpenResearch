@@ -60,6 +60,7 @@ async def search_and_rank(request: SearchRequest):
     ranked = [r.model_dump() for r in ranked]
 
     ranked.sort(key=lambda r: r["total_score"], reverse=True)
+    print(len(papers))
     store_papers(papers)
 
     return SearchResponse(

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from prompts.project_relevance_prompt import PROJECT_RELEVANCE_PROMPT
 from backend.schemas.relevance import RelevanceResponse
-from backend.utils.format_chunks import format_chunks
+from backend.utils.format_chunks import format_chunks_pdf
 from backend.utils.logger import log
 
 load_dotenv()
@@ -18,7 +18,7 @@ def find_relevant_chunks(chunks,project_description):
     prompt = (
         PROJECT_RELEVANCE_PROMPT.format(
             project_description=project_description,
-            chunks=json.dumps(format_chunks(chunks),indent=2)
+            chunks=json.dumps(format_chunks_pdf(chunks),indent=2)
         )
     )
 

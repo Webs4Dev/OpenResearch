@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from backend.api.routes.search import router as search_router
 from backend.api.routes.pdf import router as pdf_router
+from backend.api.routes.rag import router as rag_router
 
 app = FastAPI(
     title="OpenResearch",
@@ -10,6 +11,7 @@ app = FastAPI(
 
 app.include_router(search_router, prefix="/api/v1")
 app.include_router(pdf_router, prefix="/api/v1",tags=["PDF"])
+app.include_router(rag_router,prefix="/rag",tags=["RAG"])
 
 @app.get("/health")
 def health_check():

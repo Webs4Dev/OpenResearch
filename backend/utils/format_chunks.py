@@ -1,4 +1,4 @@
-def format_chunks(chunks):
+def format_chunks_pdf(chunks):
     formatted=[]
     for chunk in chunks:
         formatted.append(
@@ -10,3 +10,27 @@ def format_chunks(chunks):
         )
 
     return formatted
+
+def format_chunks_context(chunks):
+
+    context = []
+    for chunk in chunks:
+        context.append(
+            f"""
+            Paper:
+            {chunk["paper_title"]}
+
+            Source:
+            {chunk["source"]}
+
+            Chunk ID:
+            {chunk["chunk_id"]}
+
+            Text:
+            {chunk["text"]}
+            """
+        )
+
+    return "\n\n".join(
+        context
+    )
