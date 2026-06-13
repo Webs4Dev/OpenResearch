@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from backend.retrievers.manager import retrieve_all, ALL_SOURCES
 from backend.agents.ranking_agent import rank_multiple_papers
+from backend.rag.paper_store import store_papers
 from backend.utils.logger import log
 from backend.schemas.report import *
 
@@ -59,6 +60,7 @@ async def search_and_rank(request: SearchRequest):
     ranked = [r.model_dump() for r in ranked]
 
     ranked.sort(key=lambda r: r["total_score"], reverse=True)
+    store_papers(papers)
 
     return SearchResponse(
         query=request.query,
