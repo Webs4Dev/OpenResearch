@@ -8,7 +8,7 @@ from backend.utils.logger import log
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-client_db = chromadb.PersistentClient(path="./backend/rag/chroma_db")
+client_db = chromadb.PersistentClient(path="./chroma_db")
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
 
 collection = client_db.get_or_create_collection(
@@ -60,15 +60,20 @@ def search_chunks(query,k=5):
     results_list=[]
 
     for i in range(len(results["ids"][0])):
+        distance = results["distances"][0][i]
+        relevance_score = round(1/(1+distance),3)*100
+
         metadata = results["metadatas"][0][i]
         results_list.append(
             {
                 "paper_title":metadata["paper_title"],
                 "source":metadata["source"],
+                "url":metadata.get("url"),
+                "year":metadata.get("year"),
                 "page_no":metadata.get("page_no"),
                 "chunk_id":metadata.get("chunk_id"),
                 "text":results["documents"][0][i],
-                "distance":results["distances"][0][i]
+                "relevance_score":relevance_score
             }
         )
    

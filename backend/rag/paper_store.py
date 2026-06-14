@@ -22,15 +22,14 @@ def store_papers(papers):
                     {
                         "paper_title": paper.title,
                         "source": paper.source,
-                        "url": paper.url,
-                        "year": paper.published_year
+                        "url": paper.url if paper.url else "",
+                        "year": int(paper.published_year) if paper.published_year else 0
                     }
                 ]
             )
-
             stored += 1
 
         except Exception as e:
-            log(f"[Rag Error] {e}")
+            log(f"[Rag Error] {e}")       
 
     log(f"Stored {stored} papers")

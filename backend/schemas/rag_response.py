@@ -4,6 +4,8 @@ class RAGSource(BaseModel):
     paper_title:str
     source:str
     url:str | None = None
+    year:int | None = None
+    relevance_score:float
 
 class RAGResponse(BaseModel):
     answer:str

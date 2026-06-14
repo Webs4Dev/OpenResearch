@@ -38,13 +38,15 @@ def answer_research_question(question,chunks):
         source = {
             "paper_title":chunk["paper_title"],
             "source":chunk["source"],
-            "url":chunk.get("url")
+            "url":chunk.get("url"),
+            "year":chunk.get("year"),
+            "relevance_score":chunk["relevance_score"]
         }
         if source not in sources:
             sources.append(source)
 
-        return RAGResponse(
-            answer=parsed["answer"],
-            confidence=parsed["confidence"],
-            sources=[RAGSource(**s) for s in sources]
-        )
+    return RAGResponse(
+        answer=parsed["answer"],
+        confidence=parsed["confidence"],
+        sources=[RAGSource(**s) for s in sources]
+    )    

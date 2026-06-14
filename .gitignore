@@ -6,4 +6,6 @@ __pycache__/
 
 #Sample Pdfs
 docs/
-backend/rag/chroma_db/
+
+#Database
+chroma_db/
