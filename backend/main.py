@@ -9,7 +9,7 @@ app = FastAPI(
     version="0.1.0"
 )
 
-app.include_router(search_router, prefix="/api/v1")
+app.include_router(search_router, prefix="/api/v1",tags=["SEARCH"])
 app.include_router(pdf_router, prefix="/api/v1",tags=["PDF"])
 app.include_router(rag_router,prefix="/rag",tags=["RAG"])
 
