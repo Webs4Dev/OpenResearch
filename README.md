@@ -176,6 +176,7 @@ Q&A Agent
 - ✅ Day 26 — Paper Metadata Addition to DB
 - ✅ Day 27 — ChromaDB Paper Storage & Rag QA Endpoint
 - ✅ Day 28 — Fixed Minor Issues & Added Relevance Score  
+- ✅ Day 29 — PDF Ingestion Pipeline  
 
 ---
 
