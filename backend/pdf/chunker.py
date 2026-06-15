@@ -32,7 +32,7 @@ def chunk_page(text,page_no,chunk_size=1000,overlap=200):
 
     while start < len(text):
 
-        end = start +chunk_size
+        end = start + chunk_size
         chunk_text = text[start:end]
         
         chunks.append(
