@@ -17,15 +17,6 @@ def ingest_paper(paper):
     pdf_path = download_pdf(paper.url,pdf_path)
 
     pages = extract_pdf_pages(pdf_path)
-    
-    total_chars = sum(
-        len(page["text"])
-        for page in pages
-    )
-
-    print(f"Pages: {len(pages)}")
-    print(f"Chars: {total_chars}")
-
     chunks = build_chunks_from_pages(pages)
 
     os.remove(pdf_path)
