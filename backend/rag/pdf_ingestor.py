@@ -5,9 +5,25 @@ from backend.pdf.chunker import build_chunks_from_pages
 from backend.rag.vector_store import store_chunks
 from backend.pdf.downloader import download_pdf
 from backend.utils.pdf import has_pdf
+from backend.rag.vector_store import collection
+from backend.utils.logger import log
+
+def paper_exists(paper_title):
+    results = collection.get(
+    where={
+        "paper_title":paper_title
+    }
+    )
+    return len(results["ids"]) > 0
+
 
 def ingest_paper(paper):
     if not has_pdf(paper):
+        log(f"No pdf available: {paper.title}")
+        return False
+
+    if paper_exists(paper.title):
+        log(f"Already stored: {paper.title}")
         return False
     
     os.makedirs("docs/temp",exist_ok=True)

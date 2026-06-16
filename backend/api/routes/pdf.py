@@ -10,7 +10,7 @@ from backend.utils.logger import log
 
 router = APIRouter()
 
-@router.post("/pdf/analyze",response_model=PDFAnalysisResponse)
+@router.post("/analyze",response_model=PDFAnalysisResponse)
 
 async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...),question:str=File(...)):
 

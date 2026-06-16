@@ -3,8 +3,10 @@ from fastapi import APIRouter, HTTPException
 from backend.retrievers.manager import retrieve_all, ALL_SOURCES
 from backend.agents.ranking_agent import rank_multiple_papers
 from backend.rag.paper_store import store_papers
+from backend.rag.pdf_ingestor import ingest_paper
 from backend.utils.logger import log
 from backend.schemas.report import *
+from backend.rag.vector_store import collection
 
 
 router = APIRouter()
@@ -60,8 +62,42 @@ async def search_and_rank(request: SearchRequest):
     ranked = [r.model_dump() for r in ranked]
 
     ranked.sort(key=lambda r: r["total_score"], reverse=True)
+
+    ingested = 0
+    skipped = 0
+    failed = 0
+    for ranked_paper in ranked[:3]:
+
+        matching_paper = next(
+            (p for p in papers if p.title == ranked_paper["paper_name"]),
+            None
+        )
+
+        if not matching_paper:
+            continue
+
+        try:
+
+            result = ingest_paper(matching_paper)
+            if result:
+                ingested += 1
+            else:
+                skipped += 1
+
+        except Exception as e:
+            failed += 1
+            log(f"PDF Ingestion Error: {e}")
+
+
     log(f"Retrieved {len(papers)} papers")
+    log(f"Ingested={ingested} "
+        f"Skipped={skipped} "
+        f"Failed={failed}"
+    )
+
+    print(collection.count())
     store_papers(papers)
+    print(collection.count())
 
     return SearchResponse(
         query=request.query,
