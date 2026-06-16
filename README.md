@@ -177,6 +177,7 @@ Q&A Agent
 - ✅ Day 27 — ChromaDB Paper Storage & Rag QA Endpoint
 - ✅ Day 28 — Fixed Minor Issues & Added Relevance Score  
 - ✅ Day 29 — PDF Ingestion Pipeline  
+- ✅ Day 30 — Integration PDF Ingestion in Search  
 
 ---
 
