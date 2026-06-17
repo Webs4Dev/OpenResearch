@@ -1,4 +1,5 @@
-from backend.rag.vector_store import collection,get_embedding
+from backend.rag.vector_store import get_embedding
+from backend.rag.clients import paper_collection
 from backend.utils.logger import log
 
 def store_papers(papers):
@@ -14,7 +15,7 @@ def store_papers(papers):
             embedding = get_embedding(text)
             paper_id = paper_id = f"""{paper.source}_{paper.title.replace(" ","_")}"""
 
-            collection.add(
+            paper_collection.add(
                 ids=[paper_id],
                 documents=[text],
                 embeddings=[embedding],

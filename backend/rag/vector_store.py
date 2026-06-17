@@ -5,16 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from backend.utils.logger import log
+from backend.rag.clients import chunk_collection
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-client_db = chromadb.PersistentClient(path="./chroma_db")
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
-
-collection = client_db.get_or_create_collection(
-    name="papers"
-)
-
 
 def get_embedding(text):
     response = client_openai.embeddings.create(
@@ -29,7 +23,7 @@ def store_chunks(chunks,paper_title,source):
 
     for chunk in chunks:
         embedding = get_embedding(chunk.text)
-        collection.add(
+        chunk_collection.add(
             ids=[f"{paper_title}_{chunk.chunk_id}"],
             documents=[chunk.text],
             embeddings=[embedding],
@@ -47,11 +41,9 @@ def store_chunks(chunks,paper_title,source):
 
 def search_chunks(query,k=5):
 
-    query_embedding = (
-        get_embedding(query)
-    )
-
-    results = collection.query(
+    query_embedding = get_embedding(query)
+    
+    results = chunk_collection.query(
         query_embeddings=[query_embedding],
         n_results=k
     )

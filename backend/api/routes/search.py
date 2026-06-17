@@ -6,8 +6,6 @@ from backend.rag.paper_store import store_papers
 from backend.rag.pdf_ingestor import ingest_paper
 from backend.utils.logger import log
 from backend.schemas.report import *
-from backend.rag.vector_store import collection
-
 
 router = APIRouter()
 
@@ -66,7 +64,7 @@ async def search_and_rank(request: SearchRequest):
     ingested = 0
     skipped = 0
     failed = 0
-    for ranked_paper in ranked[:3]:
+    for ranked_paper in ranked[:5]:
 
         matching_paper = next(
             (p for p in papers if p.title == ranked_paper["paper_name"]),
@@ -90,14 +88,12 @@ async def search_and_rank(request: SearchRequest):
 
 
     log(f"Retrieved {len(papers)} papers")
-    log(f"Ingested={ingested} "
+    log(f"Ingested={ingested}"
         f"Skipped={skipped} "
         f"Failed={failed}"
     )
 
-    print(collection.count())
     store_papers(papers)
-    print(collection.count())
 
     return SearchResponse(
         query=request.query,

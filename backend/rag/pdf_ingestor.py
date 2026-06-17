@@ -5,11 +5,11 @@ from backend.pdf.chunker import build_chunks_from_pages
 from backend.rag.vector_store import store_chunks
 from backend.pdf.downloader import download_pdf
 from backend.utils.pdf import has_pdf
-from backend.rag.vector_store import collection
+from backend.rag.clients import paper_collection
 from backend.utils.logger import log
 
 def paper_exists(paper_title):
-    results = collection.get(
+    results = paper_collection.get(
     where={
         "paper_title":paper_title
     }
