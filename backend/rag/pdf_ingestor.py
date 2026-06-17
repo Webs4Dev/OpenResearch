@@ -5,8 +5,9 @@ from backend.pdf.chunker import build_chunks_from_pages
 from backend.rag.vector_store import store_chunks
 from backend.pdf.downloader import download_pdf
 from backend.utils.pdf import has_pdf
-from backend.rag.clients import paper_collection
 from backend.utils.logger import log
+from backend.utils.hash import generate_paper_id
+from backend.rag.clients import paper_collection
 
 def paper_exists(paper_title):
     results = paper_collection.get(
@@ -27,8 +28,8 @@ def ingest_paper(paper):
         return False
     
     os.makedirs("docs/temp",exist_ok=True)
-    filename = (paper.title.replace(" ", "_")[:50])
-    pdf_path = (f"docs/temp/{filename}.pdf")
+    paper_id = generate_paper_id(paper.title)
+    pdf_path = (f"docs/temp/{paper_id}.pdf")
 
     pdf_path = download_pdf(paper.url,pdf_path)
 
