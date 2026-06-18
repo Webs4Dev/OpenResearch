@@ -39,14 +39,20 @@ def store_chunks(chunks,paper_title,source):
     log(f"Stored {len(chunks)} chunks")
 
 
-def search_chunks(query,k=5):
+def search_chunks(query,k=5,paper_titles=None):
 
     query_embedding = get_embedding(query)
+    if not paper_titles:
+        results = chunk_collection.query(
+            query_embeddings=[query_embedding],
+            n_results=k
+        )
+    else:
+        results = chunk_collection.query(
+            query_embeddings=[query_embedding],
+            n_results=k,
+        )
     
-    results = chunk_collection.query(
-        query_embeddings=[query_embedding],
-        n_results=k
-    )
     log(f"Retrieved {len(results["ids"][0])} chunks")
 
     results_list=[]

@@ -14,4 +14,5 @@ class RAGResponse(BaseModel):
 
 class RAGRequest(BaseModel):
     question:str
-    top_k:int = 5
+    paper_k:int = 5
+    chunk_k:int = 5

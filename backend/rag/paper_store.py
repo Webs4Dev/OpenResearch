@@ -34,3 +34,29 @@ def store_papers(papers):
             log(f"[Rag Error] {e}")       
 
     log(f"Stored {stored} papers")
+
+
+def search_papers(query:str,k:int=5):
+
+    query_embeddings = get_embedding(query)
+
+    results = paper_collection.query(
+        query_embeddings=[query_embeddings],
+        n_results=k
+    )
+    log(f"Retrieved {len(results["metadatas"][0])} papers")
+
+    papers = []
+
+    for metadata,distance in zip(results["metadatas"][0],results["distances"][0]):
+        papers.append(
+            {
+                "paper_title":metadata["paper_title"],
+                "source":metadata["source"],
+                "url":metadata["url"],
+                "year":metadata["year"],
+                "distance":distance
+            }
+        )
+    
+    return papers

@@ -1,10 +1,18 @@
-def has_pdf(paper):
+def has_pdf(url: str):
 
-    if not paper.url:
+    if not url:
         return False
 
-    url = paper.url.lower()
+    url = url.lower()
 
-    return (
-        ".pdf" in url or "/pdf/" in url
+    pdf_patterns = [
+        ".pdf",
+        "/pdf",
+        "pdf?",
+        "pdf#"
+    ]
+
+    return any(
+        pattern in url
+        for pattern in pdf_patterns
     )
