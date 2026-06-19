@@ -180,6 +180,7 @@ Q&A Agent
 - ✅ Day 30 — Integration PDF Ingestion in Search  
 - ✅ Day 31 — Creating Seperate Chunk & Paper Collection  
 - ✅ Day 32 — Hybrid Retrieval using Chunk & Paper Collection  
+- ✅ Day 33 — Fixing RAG source metadata
 
 ---
 
