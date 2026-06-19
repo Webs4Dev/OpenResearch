@@ -24,7 +24,8 @@ def store_papers(papers):
                         "paper_title": paper.title,
                         "source": paper.source,
                         "url": paper.url if paper.url else "",
-                        "year": int(paper.published_year) if paper.published_year else 0
+                        "year": int(paper.published_year) if paper.published_year else 0,
+                        "has_chunks":False
                     }
                 ]
             )
@@ -55,8 +56,23 @@ def search_papers(query:str,k:int=5):
                 "source":metadata["source"],
                 "url":metadata["url"],
                 "year":metadata["year"],
+                "has_chunks":metadata["has_chunks"],
                 "distance":distance
             }
         )
     
     return papers
+
+def get_paper_metadata(paper_title:str):
+    results = paper_collection.get(
+        where={
+            "paper_title":paper_title
+        }
+    )
+
+    if not results["metadatas"]:
+        return None
+    else:
+        return results["metadatas"][0]
+
+    

@@ -14,46 +14,7 @@ Use a single PDF verification flow for both pipelines. Prefer download-based val
 
 ---
 
-## Issue 2 — Hybrid Retrieval `$in` Filter Issue
-
-### Problem
-
-Using a ChromaDB query like:
-
-```python
-where = {
-    "paper_title": {"$in": paper_titles}
-}
-```
-
-returns zero results.
-
-### Proposed solution
-
-Query each paper individually, merge the results, sort by relevance, and return the top chunks. This avoids relying on a failing `$in` filter in ChromaDB.
-
----
-
-## Issue 3 — Missing URL and Year in RAG Sources
-
-### Problem
-
-Chunk metadata sometimes lacks the original paper URL and publication year, causing RAG citations to include null values, e.g.:
-
-```json
-{
-  "url": null,
-  "year": null
-}
-```
-
-### Proposed solution
-
-Use the chunk's `paper_title` to look up full metadata from the `paper_metadata` collection and enrich citations with `url`, `year`, and `source` fields.
-
----
-
-## Issue 4 — Papers Without Chunks in Hybrid Retrieval
+## Issue 2 — Papers Without Chunks in Hybrid Retrieval
 
 ### Problem
 

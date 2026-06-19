@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from prompts.rag_qa_prompt import RAG_QA_PROMPT
 from backend.schemas.rag_response import RAGResponse,RAGSource
 from backend.utils.format_chunks import format_chunks_context
+from backend.rag.paper_store import get_paper_metadata
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -35,11 +36,12 @@ def answer_research_question(question,chunks):
 
     sources=[]
     for chunk in chunks:
+        metadata = get_paper_metadata(chunk["paper_title"])
         source = {
             "paper_title":chunk["paper_title"],
-            "source":chunk["source"],
-            "url":chunk.get("url"),
-            "year":chunk.get("year"),
+            "source":metadata["source"],
+            "url":metadata.get("url"),
+            "year":metadata.get("year"),
             "relevance_score":chunk["relevance_score"]
         }
         if source not in sources:

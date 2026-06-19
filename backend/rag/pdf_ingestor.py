@@ -40,4 +40,19 @@ def ingest_paper(paper):
 
     store_chunks(chunks,paper.title,paper.source)
 
+    paper_collection.update(
+        where={
+            "paper_title":paper.title
+        },
+        metadatas=[
+            {
+                "paper_title":paper.title,
+                "source":paper.source,
+                "url":paper.url,
+                "year":paper.published_year,
+                "has_chunks":True
+            }
+        ]
+    )
+
     return True

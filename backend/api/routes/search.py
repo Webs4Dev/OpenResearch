@@ -64,7 +64,7 @@ async def search_and_rank(request: SearchRequest):
     ingested = 0
     skipped = 0
     failed = 0
-    for ranked_paper in ranked[:5]:
+    for ranked_paper in ranked:
 
         matching_paper = next(
             (p for p in papers if p.title == ranked_paper["paper_name"]),
