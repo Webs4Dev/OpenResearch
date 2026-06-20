@@ -47,6 +47,9 @@ def search_papers(query:str,k:int=5):
     )
     log(f"Retrieved {len(results["metadatas"][0])} papers")
 
+    for metadata in results["metadatas"][0]:
+        print(metadata)
+
     papers = []
 
     for metadata,distance in zip(results["metadatas"][0],results["distances"][0]):

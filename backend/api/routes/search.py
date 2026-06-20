@@ -61,6 +61,8 @@ async def search_and_rank(request: SearchRequest):
 
     ranked.sort(key=lambda r: r["total_score"], reverse=True)
 
+    store_papers(papers)
+
     ingested = 0
     skipped = 0
     failed = 0
@@ -84,7 +86,7 @@ async def search_and_rank(request: SearchRequest):
 
         except Exception as e:
             failed += 1
-            log(f"PDF Ingestion Error: {e}")
+            log(f"[PDF Ingestion Error] {e}")
 
 
     log(f"Retrieved {len(papers)} papers")
@@ -92,8 +94,6 @@ async def search_and_rank(request: SearchRequest):
         f"Skipped={skipped} "
         f"Failed={failed}"
     )
-
-    store_papers(papers)
 
     return SearchResponse(
         query=request.query,

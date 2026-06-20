@@ -19,7 +19,7 @@ def paper_exists(paper_title):
 
 
 def ingest_paper(paper):
-    if not has_pdf(paper):
+    if not has_pdf(paper.url):
         log(f"No pdf available: {paper.title}")
         return False
 
@@ -41,9 +41,7 @@ def ingest_paper(paper):
     store_chunks(chunks,paper.title,paper.source)
 
     paper_collection.update(
-        where={
-            "paper_title":paper.title
-        },
+        ids=[paper_id],
         metadatas=[
             {
                 "paper_title":paper.title,
