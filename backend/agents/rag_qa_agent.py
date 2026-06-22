@@ -34,21 +34,34 @@ def answer_research_question(question,chunks):
     )
     parsed = json.loads(response.choices[0].message.content)
 
-    sources=[]
+    source_map={}
     for chunk in chunks:
-        metadata = get_paper_metadata(chunk["paper_title"])
-        source = {
-            "paper_title":chunk["paper_title"],
-            "source":metadata["source"],
-            "url":metadata.get("url"),
-            "year":metadata.get("year"),
-            "relevance_score":chunk["relevance_score"]
-        }
-        if source not in sources:
-            sources.append(source)
+        title = chunk["paper_title"]
+
+        if title not in source_map:
+            metadata = get_paper_metadata(chunk["paper_title"])
+            source_map[title] = {
+                "paper_title":chunk["paper_title"],
+                "source":metadata["source"],
+                "url":metadata.get("url"),
+                "year":metadata.get("year"),
+                "relevance_score":chunk["relevance_score"],
+                "evidence_count":1
+            }
+        else:
+            source_map[title]["evidence_count"]+=1
+
+    sources = sorted(
+        source_map.values(),
+        key=lambda x: x["relevance_score"],
+        reverse=True
+    ) 
+    papers_used = len(source_map)
 
     return RAGResponse(
         answer=parsed["answer"],
         confidence=parsed["confidence"],
+        papers_used=papers_used,
+        key_findings=parsed.get("key_findings",[]),
         sources=[RAGSource(**s) for s in sources]
     )    

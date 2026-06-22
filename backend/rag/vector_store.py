@@ -84,3 +84,19 @@ def search_chunks(query,k=5,paper_title=None):
 def retrieve_context(query,k=5):
     return search_chunks(query=query,k=k)
 
+
+def format_chunks_context(chunks):
+    context = ""
+
+    for chunk in chunks:
+
+        context += f"""
+        PAPER: {chunk['paper_title']}
+        SOURCE: {chunk['source']}
+        TEXT:
+        {chunk['text']}
+
+        --------------------------------
+        """
+
+    return context

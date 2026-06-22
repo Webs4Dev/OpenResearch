@@ -7,24 +7,24 @@ from backend.pdf.downloader import download_pdf
 from backend.utils.pdf import has_pdf
 from backend.utils.logger import log
 from backend.utils.hash import generate_paper_id
-from backend.rag.clients import paper_collection
+from backend.rag.clients import paper_collection,chunk_collection
 
-def paper_exists(paper_title):
-    results = paper_collection.get(
-    where={
-        "paper_title":paper_title
-    }
+def paper_has_chunks(paper_title):
+    results = chunk_collection.get(
+        where={
+            "paper_title": paper_title
+        },
+        limit=1
     )
     return len(results["ids"]) > 0
-
 
 def ingest_paper(paper):
     if not has_pdf(paper.url):
         log(f"No pdf available: {paper.title}")
         return False
 
-    if paper_exists(paper.title):
-        log(f"Already stored: {paper.title}")
+    if paper_has_chunks(paper.title):
+        log(f"Already ingested: {paper.title}")
         return False
     
     os.makedirs("docs/temp",exist_ok=True)

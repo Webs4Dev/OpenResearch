@@ -62,7 +62,7 @@ async def search_and_rank(request: SearchRequest):
     ranked.sort(key=lambda r: r["total_score"], reverse=True)
 
     store_papers(papers)
-
+    
     ingested = 0
     skipped = 0
     failed = 0
