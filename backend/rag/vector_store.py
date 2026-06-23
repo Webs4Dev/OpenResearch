@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from backend.utils.logger import log
-from backend.rag.clients import chunk_collection
+from backend.rag.collection import chunk_collection
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
