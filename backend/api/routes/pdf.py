@@ -5,12 +5,12 @@ from backend.pdf.parser import extract_pdf_pages
 from backend.pdf.chunker import build_chunks_from_pages
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
-from backend.schemas.pdf_analysis import PDFAnalysisResponse
+from backend.schemas.pdf import PDFAnalysisResponse_v1
 from backend.utils.logger import log
 
 router = APIRouter()
 
-@router.post("/analyze",response_model=PDFAnalysisResponse)
+@router.post("/analyze",response_model=PDFAnalysisResponse_v1)
 
 async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...),question:str=File(...)):
 
@@ -46,7 +46,7 @@ async def analyze_pdf(file:UploadFile=File(...),project_description:str=File(...
 
     qa_result = answer_question(question=question,chunks=selected_chunks)
 
-    return PDFAnalysisResponse(
+    return PDFAnalysisResponse_v1(
         filename=file.filename,
         pages=pages,
         text_length=len(text),

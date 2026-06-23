@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from prompts.pdf_qa_prompt import PDF_QA_PROMPT
-from backend.schemas.pdf_qa import PDFQAResponse
+from backend.schemas.pdf import PDFQAResponse
 from backend.utils.format_chunks import format_chunks_pdf
 from backend.utils.logger import log
 

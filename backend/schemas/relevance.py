@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class RelevantChunk(BaseModel):
     chunk_id:int
-    page_no:int 
+    page_no:int|None = None
     relevance_score:int
     chunk_type:str
     reason:str

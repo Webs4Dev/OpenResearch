@@ -1,7 +1,8 @@
-import chromadb 
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+
+from backend.utils.hash import generate_paper_id
 load_dotenv()
 
 from backend.utils.logger import log
@@ -19,18 +20,18 @@ def get_embedding(text):
     return response.data[0].embedding
 
 
-def store_chunks(chunks,paper_title,source):
+def store_chunks(chunks,paper_title):
 
     for chunk in chunks:
         embedding = get_embedding(chunk.text)
+        chunk_code = generate_paper_id(f"{paper_title}_{chunk.chunk_id}")
         chunk_collection.add(
-            ids=[f"{paper_title}_{chunk.chunk_id}"],
+            ids=[chunk_code],
             documents=[chunk.text],
             embeddings=[embedding],
             metadatas=[
                 {
                     "paper_title":paper_title,
-                    "source":source,
                     "page_no":chunk.page_no,
                     "chunk_id":chunk.chunk_id
                 }
@@ -68,7 +69,6 @@ def search_chunks(query,k=5,paper_title=None):
         results_list.append(
             {
                 "paper_title":metadata["paper_title"],
-                "source":metadata["source"],
                 "url":metadata.get("url"),
                 "year":metadata.get("year"),
                 "page_no":metadata.get("page_no"),
