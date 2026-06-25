@@ -38,7 +38,7 @@ async def ingest_pdf(file:UploadFile=File(...)):
         chunks_stored=len(chunks)
     )
 
-@router.post("/analyze_v2",response_model=PDFAnalysisResponse)
+@router.post("/analyze",response_model=PDFAnalysisResponse)
 async def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...)):
     temp_path=(f"temp_{file.filename}")
     contents=(await file.read())

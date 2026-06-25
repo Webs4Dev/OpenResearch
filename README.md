@@ -184,6 +184,7 @@ Q&A Agent
 - ✅ Day 34 — Chunk-aware Paper Filtering & Fixing Pipeline
 - ✅ Day 35 — Resolve has_chunks Metadata Update in Hybrid Retrieval
 - ✅ Day 36 — PDF Endpoint v2
+- ✅ Day 37 — Adding chunk_text to the PDF Analysis Pipeline
 
 ---
 
