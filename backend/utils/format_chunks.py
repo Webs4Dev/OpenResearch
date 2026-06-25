@@ -3,9 +3,9 @@ def format_chunks_pdf(chunks):
     for chunk in chunks:
         formatted.append(
             {
-                "chunk_id":chunk['chunk_id'],
-                "page_no":chunk['page_no'],
-                "text":chunk['text']
+                "chunk_id":chunk.chunk_id,
+                "page_no":chunk.page_no,
+                "text":chunk.text
             }
         )
 
