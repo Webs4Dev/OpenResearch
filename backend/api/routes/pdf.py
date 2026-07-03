@@ -1,7 +1,4 @@
 from fastapi import APIRouter,UploadFile,File,Form
-from pathlib import Path
-from fastapi import HTTPException
-from fastapi.responses import FileResponse
 import fitz
 
 from backend.pdf.parser import extract_pdf_pages
