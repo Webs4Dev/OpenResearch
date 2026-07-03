@@ -1,4 +1,7 @@
 from fastapi import APIRouter,UploadFile,File,Form
+from pathlib import Path
+from fastapi import HTTPException
+from fastapi.responses import FileResponse
 import fitz
 
 from backend.pdf.parser import extract_pdf_pages
@@ -7,17 +10,19 @@ from backend.rag.vector_store import store_chunks,search_chunks
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf import *
+from backend.utils.hash import generate_paper_id
 from backend.utils.logger import log
 
 router = APIRouter()
 
 @router.post("/ingest",response_model=PDFIngestResponse)
 async def ingest_pdf(file:UploadFile=File(...)):
-    temp_path=(f"temp_{file.filename}")
+    paper_id = generate_paper_id(file.filename)
+    temp_path=(f"docs/pdfs/{paper_id}.pdf")
     contents=(await file.read())
 
     log(f"PDF uploaded: {file.filename}")
-    with open(temp_path,"wb") as f:
+    with open(temp_path,'wb') as f:
         f.write(contents)
 
     pages=extract_pdf_pages(temp_path)
@@ -34,13 +39,15 @@ async def ingest_pdf(file:UploadFile=File(...)):
 
     return PDFIngestResponse(
         filename=file.filename,
+        paper_id=paper_id,
         pages=total_pages,
         chunks_stored=len(chunks)
     )
 
 @router.post("/analyze",response_model=PDFAnalysisResponse)
 async def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...)):
-    temp_path=(f"temp_{file.filename}")
+    paper_id = generate_paper_id(file.filename)
+    temp_path=(f"docs/pdfs/{paper_id}.pdf")
     contents=(await file.read())
 
     log(f"PDF uploaded: {file.filename}")
@@ -69,6 +76,7 @@ async def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...
 
     return PDFAnalysisResponse(
         filename=file.filename,
+        paper_id=paper_id,
         pages=total_pages,
         chunk_count=len(chunks),
         relevant_chunks=relevant_chunks

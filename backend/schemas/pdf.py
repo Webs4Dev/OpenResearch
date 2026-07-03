@@ -7,11 +7,13 @@ class PDFRequest(BaseModel):
 
 class PDFIngestResponse(BaseModel):
     filename:str
+    paper_id:str
     pages:int
     chunks_stored:int
 
 class PDFAnalysisResponse(BaseModel):
     filename:str
+    paper_id:str
     pages:int
     chunk_count:int
     relevant_chunks:list[RelevantChunk]
