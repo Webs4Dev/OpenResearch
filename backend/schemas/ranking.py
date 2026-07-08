@@ -12,6 +12,7 @@ class Scores(BaseModel):
 class RankingResult(BaseModel):
     paper_name: str
     source: str
+    published_year: Optional[int] = None
     pdf_status: str
     paper_url: Optional[str] = None
     scores: Scores

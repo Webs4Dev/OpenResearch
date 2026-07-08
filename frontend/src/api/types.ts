@@ -31,9 +31,6 @@ export interface RankingResult {
   why_it_matches: string[];
   useful_ideas: string[];
   pdf_usefulness: string;
-  // NOTE: the backend's RankingResult does not currently include a
-  // publication year field. If you add one server-side (e.g. by carrying
-  // Paper.published_year through the ranking agent), surface it here.
   published_year?: number | null;
 }
 

@@ -2,11 +2,6 @@ SOURCE_DISCOVERY_PROMPT = """
 You are a research source discovery agent. Your job is to analyze a user's research query and determine which sources are most likely to contain relevant, high-quality papers.
 
 Available sources and what they are best for:
-- arxiv            → preprints in CS, ML, AI, physics, math, quantitative biology
-- semantic_scholar → broad academic papers with citation data and open access PDFs
-- pubmed           → biomedical, clinical, neuroscience, genomics, health research
-- openalex         → large open catalog covering all academic disciplines
-- crossref         → metadata-rich papers with DOIs across all fields
 - gov              → government research, policy papers, public sector technical reports
 - edu              → university research, theses, dissertations, institutional publications
 - nasa             → space, aerospace, planetary science, earth observation, physics
