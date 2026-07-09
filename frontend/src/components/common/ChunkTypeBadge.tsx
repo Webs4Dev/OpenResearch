@@ -13,11 +13,10 @@ export function ChunkTypeBadge({ type }: { type: string }) {
   );
 }
 
-/** Exposed so PdfChunkViewer can apply the same colors to in-PDF highlights. */
-export const CHUNK_HIGHLIGHT_COLORS: Record<string, { fill: string; tag: string }> = {
-  method: { fill: "rgba(239, 159, 39, 0.28)", tag: "#9A6A1E" },
-  result: { fill: "rgba(93, 202, 165, 0.28)", tag: "#085041" },
-  background: { fill: "rgba(156, 152, 143, 0.22)", tag: "#6B6862" },
-};
-
-export const FALLBACK_HIGHLIGHT = { fill: "rgba(59, 122, 100, 0.22)", tag: "#3B7A64" };
+/**
+ * Single, deliberately loud highlight color for every chunk in the PDF —
+ * the pastel per-type tints were too faint to notice. Which chunk is which
+ * is now conveyed by the numbered badge (see PdfChunkViewer), not color.
+ */
+export const HIGHLIGHT_YELLOW = "rgba(255, 224, 0, 0.50)";
+export const HIGHLIGHT_YELLOW_ACTIVE_OUTLINE = "#B45309";

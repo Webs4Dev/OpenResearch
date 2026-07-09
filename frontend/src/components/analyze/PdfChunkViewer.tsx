@@ -1,8 +1,8 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { Document, Page } from "react-pdf";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { RelevantChunk } from "../../api/types";
-import { CHUNK_HIGHLIGHT_COLORS, FALLBACK_HIGHLIGHT } from "../common/ChunkTypeBadge";
+import { HIGHLIGHT_YELLOW, HIGHLIGHT_YELLOW_ACTIVE_OUTLINE } from "../common/ChunkTypeBadge";
 import "react-pdf/dist/Page/TextLayer.css";
 
 interface PdfChunkViewerProps {
@@ -19,16 +19,21 @@ function escapeHtml(value: string) {
     .replace(/>/g, "&gt;");
 }
 
-export function PdfChunkViewer({ file, chunks, activeChunkId, onChunkClick }: PdfChunkViewerProps) {
+export function PdfChunkViewer({
+  file,
+  chunks,
+  activeChunkId,
+  onChunkClick,
+}: PdfChunkViewerProps) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(chunks[0]?.page_no ?? 1);
 
-  // Render at the container's actual pixel width instead of a fixed value.
-  // react-pdf already multiplies this by devicePixelRatio internally, so a
-  // wider container gives sharper text, not just a bigger box.
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(420);
 
+  // Keep the rendered PDF width in sync with the actual container size, so
+  // react-pdf renders its canvas at the real display resolution instead of
+  // being CSS-stretched (which is what causes blurry text/highlights).
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -51,26 +56,33 @@ export function PdfChunkViewer({ file, chunks, activeChunkId, onChunkClick }: Pd
     [chunks, pageNumber]
   );
 
-  // react-pdf calls this per text-layer span. We wrap a span text in <mark>
-  // if it is a substring of one of this page relevant chunk texts -- a
+  // react-pdf calls this per text-layer span. We wrap a span's text in <mark>
+  // if it is a substring of one of this page's relevant chunk texts -- a
   // heuristic that works well since chunk_text is the concatenation of many
   // such spans. This is a stand-in for real bounding-box highlighting; see
   // the README note about adding bounding boxes server-side for pixel-exact
   // highlights instead of text-containment matching.
-  const customTextRenderer = ({ str }: { str: string }) => {
-    const trimmed = str.trim();
-    if (trimmed.length < 4) return escapeHtml(str);
+  //
+  // Memoized so react-pdf doesn't see a new function identity on every
+  // parent render and needlessly re-run/repaint the whole text layer.
+  const customTextRenderer = useCallback(
+    ({ str }: { str: string }) => {
+      const trimmed = str.trim();
+      if (trimmed.length < 4) return escapeHtml(str);
 
-    const match = pageChunks.find((c) => c.chunk_text?.includes(trimmed));
-    if (!match) return escapeHtml(str);
+      const match = pageChunks.find((c) => c.chunk_text?.includes(trimmed));
+      if (!match) return escapeHtml(str);
 
-    const colors = CHUNK_HIGHLIGHT_COLORS[match.chunk_type.toLowerCase()] ?? FALLBACK_HIGHLIGHT;
-    const isActive = match.chunk_id === activeChunkId;
-    const outline = isActive ? `outline:2px solid ${colors.tag};outline-offset:1px;` : "";
-    return `<mark data-chunk-id="${match.chunk_id}" style="background:${colors.fill};border-radius:2px;${outline}">${escapeHtml(
-      str
-    )}</mark>`;
-  };
+      const isActive = match.chunk_id === activeChunkId;
+      const outline = isActive
+        ? `outline:2px solid ${HIGHLIGHT_YELLOW_ACTIVE_OUTLINE};outline-offset:1px;`
+        : "";
+      return `<mark data-chunk-id="${match.chunk_id}" style="background:${HIGHLIGHT_YELLOW};border-radius:2px;${outline}">${escapeHtml(
+        str
+      )}</mark>`;
+    },
+    [pageChunks, activeChunkId]
+  );
 
   return (
     <div>
@@ -96,7 +108,7 @@ export function PdfChunkViewer({ file, chunks, activeChunkId, onChunkClick }: Pd
 
       <div
         ref={containerRef}
-        className="overflow-auto rounded-lg border border-border bg-surface-2"
+        className="relative overflow-auto rounded-lg border border-border bg-surface-2"
         onClick={(e) => {
           const target = (e.target as HTMLElement).closest("mark[data-chunk-id]");
           const id = target?.getAttribute("data-chunk-id");

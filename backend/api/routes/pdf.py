@@ -70,7 +70,7 @@ async def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...
     relevant_chunks = sort_relevant_chunks(
         chunks=chunks,
         project_description=project_description,
-        top_k=5
+        top_k=max(5,total_pages)
     )
 
     chunk_map = {chunk.chunk_id: chunk for chunk in chunks}

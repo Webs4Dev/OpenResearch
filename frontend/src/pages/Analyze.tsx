@@ -47,6 +47,14 @@ export function Analyze() {
 
   const chunks: RelevantChunk[] = analysisResult?.relevant_chunks ?? [];
 
+  // Still used for the numbered circle badges in the side list below;
+  // the PDF viewer itself no longer needs it since the active-chunk
+  // outline is enough to show which highlight corresponds to which card.
+  const chunkNumbers: Record<number, number> = {};
+  chunks.forEach((chunk, i) => {
+    chunkNumbers[chunk.chunk_id] = i + 1;
+  });
+
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
@@ -91,15 +99,20 @@ export function Analyze() {
       )}
 
       {analysisResult && !mutation.isPending && (
-        <div className="grid grid-cols-[minmax(0,1fr)_220px] gap-4">
-          <PdfChunkViewer
-            file={file}
-            chunks={chunks}
-            activeChunkId={activeChunkId}
-            onChunkClick={setActiveChunkId}
-          />
+        <div
+          className="grid grid-cols-[minmax(0,1fr)_220px] gap-4"
+          style={{ height: "calc(100vh - 180px)" }}
+        >
+          <div className="h-full overflow-y-auto">
+            <PdfChunkViewer
+              file={file}
+              chunks={chunks}
+              activeChunkId={activeChunkId}
+              onChunkClick={setActiveChunkId}
+            />
+          </div>
 
-          <div className="flex flex-col gap-2.5 overflow-y-auto">
+          <div className="flex h-full flex-col gap-2.5 overflow-y-auto">
             {chunks.map((chunk) => (
               <div
                 key={chunk.chunk_id}
@@ -109,7 +122,12 @@ export function Analyze() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <ChunkTypeBadge type={chunk.chunk_type} />
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-amber-500 bg-amber-400 text-[11px] font-semibold text-amber-950">
+                      {chunkNumbers[chunk.chunk_id]}
+                    </span>
+                    <ChunkTypeBadge type={chunk.chunk_type} />
+                  </div>
                   <span className="text-xs text-text-secondary">
                     p. {chunk.page_no ?? "?"} · {chunk.relevance_score}
                   </span>
