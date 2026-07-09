@@ -19,6 +19,16 @@ def get_embedding(text):
 
     return response.data[0].embedding
 
+def is_paper_ingested(paper_title: str) -> bool:
+    existing = chunk_collection.get(
+        where={"paper_title": paper_title},
+        limit=1
+    )
+    return len(existing["ids"]) > 0
+
+def count_chunks_for_paper(paper_title: str) -> int:
+    existing = chunk_collection.get(where={"paper_title": paper_title})
+    return len(existing["ids"])
 
 def store_chunks(chunks,paper_title):
 

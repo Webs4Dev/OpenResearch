@@ -3,7 +3,7 @@ import fitz
 
 from backend.pdf.parser import extract_pdf_pages
 from backend.pdf.chunker import build_chunks_from_pages
-from backend.rag.vector_store import store_chunks,search_chunks
+from backend.rag.vector_store import *
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf import *
@@ -15,24 +15,33 @@ router = APIRouter()
 @router.post("/ingest",response_model=PDFIngestResponse)
 async def ingest_pdf(file:UploadFile=File(...)):
     paper_id = generate_paper_id(file.filename)
-    temp_path=(f"docs/pdfs/{paper_id}.pdf")
-    contents=(await file.read())
+    temp_path = f"docs/pdfs/{paper_id}.pdf"
+    contents = await file.read()
+
+    if is_paper_ingested(file.filename):
+        log(f"'{file.filename}' already ingested — skipping re-ingest")
+        with open(temp_path, "wb") as f:
+            f.write(contents)
+        total_pages = len(fitz.open(temp_path))
+        return PDFIngestResponse(
+            filename=file.filename,
+            paper_id=paper_id,
+            pages=total_pages,
+            chunks_stored=count_chunks_for_paper(file.filename)
+        )
 
     log(f"PDF uploaded: {file.filename}")
-    with open(temp_path,'wb') as f:
+    with open(temp_path, 'wb') as f:
         f.write(contents)
 
-    pages=extract_pdf_pages(temp_path)
-    total_pages=len(fitz.open(temp_path))
+    pages = extract_pdf_pages(temp_path)
+    total_pages = len(fitz.open(temp_path))
     log(f"Extracted {total_pages} pages from {file.filename}")
 
     chunks = build_chunks_from_pages(pages)
     log(f"Created {len(chunks)} chunks")
 
-    store_chunks(
-        paper_title=file.filename,
-        chunks=chunks
-    )
+    store_chunks(paper_title=file.filename, chunks=chunks)
 
     return PDFIngestResponse(
         filename=file.filename,
