@@ -10,7 +10,15 @@ const navItems = [
 export function Sidebar() {
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-surface-1 px-3 py-4">
-      <div className="mb-6 px-2 text-[15px] font-medium">OpenResearch</div>
+      <div className="mb-6 flex items-center gap-2 px-2 text-[15px] font-medium">
+        <img
+          src="/logo.png"
+          alt="OpenResearch logo"
+          className="h-5 w-5"
+          style={{ filter: "brightness(0)" }}
+        />
+        OpenResearch
+      </div>
       <nav className="flex flex-col gap-1">
         {navItems.map(({ to, label, icon: Icon, end }) => (
           <NavLink

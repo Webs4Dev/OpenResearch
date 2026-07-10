@@ -8,6 +8,7 @@ import { AskChat } from "../components/workspace/AskChat";
 import { Spinner } from "../components/common/Spinner";
 import { ingestPdf } from "../api/endpoints";
 import { useWorkspaceStore } from "../store/workspaceStore";
+import { useActivityStore } from "../store/activityStore";
 
 type Stage = "dropzone" | "choice" | "ingesting" | "chat";
 
@@ -21,11 +22,18 @@ export function PdfWorkspace() {
 
   const [stage, setStage] = useState<Stage>(file && ingestResult ? "chat" : "dropzone");
 
+  const logActivity = useActivityStore((s) => s.logActivity);
+
   const ingestMutation = useMutation({
     mutationFn: (f: File) => ingestPdf(f),
     onSuccess: (result) => {
       setIngestResult(result);
       setStage("chat");
+      logActivity({
+        type: "ingest",
+        label: result.filename,
+        detail: `${result.pages} pages · ${result.chunks_stored} chunks`,
+      });
     },
   });
 

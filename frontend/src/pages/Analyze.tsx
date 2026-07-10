@@ -8,6 +8,7 @@ import { PdfChunkViewer } from "../components/analyze/PdfChunkViewer";
 import { ChunkTypeBadge } from "../components/common/ChunkTypeBadge";
 import { Spinner } from "../components/common/Spinner";
 import type { RelevantChunk } from "../api/types";
+import { useActivityStore } from "../store/activityStore";
 
 export function Analyze() {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ export function Analyze() {
   const [showDescBox, setShowDescBox] = useState(true);
   const [activeChunkId, setActiveChunkId] = useState<number | null>(null);
 
+  const logActivity = useActivityStore((s) => s.logActivity);
+
   const mutation = useMutation({
     mutationFn: () => {
       if (!file) throw new Error("No file selected");
@@ -28,6 +31,11 @@ export function Analyze() {
       setAnalysisResult(result);
       setShowDescBox(false);
       setActiveChunkId(result.relevant_chunks[0]?.chunk_id ?? null);
+      logActivity({
+        type: "analyze",
+        label: result.filename,
+        detail: `${result.relevant_chunks.length} relevant chunks`,
+      });
     },
   });
 

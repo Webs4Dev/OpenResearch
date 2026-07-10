@@ -5,6 +5,7 @@ import { searchPapers, listSources } from "../api/endpoints";
 import type { RankingResult } from "../api/types";
 import { ScoreBadge } from "../components/common/ScoreBadge";
 import { Spinner } from "../components/common/Spinner";
+import { useActivityStore } from "../store/activityStore";
 
 export function SearchPapers() {
   const [query, setQuery] = useState("");
@@ -18,15 +19,23 @@ export function SearchPapers() {
     queryFn: listSources,
   });
 
+  const logActivity = useActivityStore((s) => s.logActivity);
+
   const mutation = useMutation({
     mutationFn: () =>
       searchPapers({
         query,
         project_description: projectDescription || undefined,
         max_results: maxResults,
-        // Empty selection means "use all sources" (backend default when omitted).
         sources: selectedSources.length > 0 ? selectedSources : undefined,
       }),
+    onSuccess: (data) => {
+      logActivity({
+        type: "search",
+        label: query,
+        detail: `${data.total_ranked} result${data.total_ranked === 1 ? "" : "s"}`,
+      });
+    },
   });
 
   const handleSearch = () => {

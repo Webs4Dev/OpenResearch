@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { askQuestion } from "../../api/endpoints";
 import { useWorkspaceStore } from "../../store/workspaceStore";
+import { useActivityStore } from "../../store/activityStore";
 
 interface AskChatProps {
   paperTitle: string;
@@ -13,6 +14,7 @@ export function AskChat({ paperTitle }: AskChatProps) {
   const chatHistory = useWorkspaceStore((s) => s.chatHistory);
   const addChatTurn = useWorkspaceStore((s) => s.addChatTurn);
   const updateChatTurn = useWorkspaceStore((s) => s.updateChatTurn);
+  const logActivity = useActivityStore((s) => s.logActivity);
 
   const handleAsk = async () => {
     const trimmed = question.trim();
@@ -31,10 +33,11 @@ export function AskChat({ paperTitle }: AskChatProps) {
         confidence: result.confidence,
         foundInPages: result.found_in_pages,
       });
+      logActivity({ type: "ask", label: trimmed, detail: paperTitle });
     } catch {
       updateChatTurn(id, {
         status: "error",
-        errorMessage: "Couldn't get an answer — check the backend connection and try again.",
+        errorMessage: "Couldn't get an answer -- check the backend connection and try again.",
       });
     } finally {
       setIsSending(false);
@@ -55,11 +58,11 @@ export function AskChat({ paperTitle }: AskChatProps) {
         {chatHistory.map((turn) => (
           <div key={turn.id} className="rounded bg-surface-1 p-3">
             <p className="mb-2 text-sm">
-              <span className="font-medium">You</span> — {turn.question}
+              <span className="font-medium">You</span> -- {turn.question}
             </p>
 
             {turn.status === "pending" && (
-              <p className="text-sm text-text-muted">Thinking…</p>
+              <p className="text-sm text-text-muted">Thinking...</p>
             )}
 
             {turn.status === "error" && (
@@ -69,7 +72,7 @@ export function AskChat({ paperTitle }: AskChatProps) {
             {turn.status === "done" && (
               <div className="rounded border border-border bg-surface-0 p-2.5">
                 <p className="mb-1.5 text-sm font-medium">
-                  Answer · confidence {turn.confidence}
+                  Answer &middot; confidence {turn.confidence}
                 </p>
                 <p className="text-sm">{turn.answer}</p>
                 {turn.foundInPages && turn.foundInPages.length > 0 && (
