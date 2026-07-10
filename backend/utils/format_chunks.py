@@ -17,17 +17,9 @@ def format_chunks_context(chunks):
     for chunk in chunks:
         context.append(
             f"""
-            Paper:
-            {chunk["paper_title"]}
-
-            Source:
-            {chunk["source"]}
-
-            Chunk ID:
-            {chunk["chunk_id"]}
-
-            Text:
-            {chunk["text"]}
+            chunk_id:{chunk["chunk_id"]}
+            page_no:{chunk["page_no"]}
+            text:{chunk["text"]}
             """
         )
 
